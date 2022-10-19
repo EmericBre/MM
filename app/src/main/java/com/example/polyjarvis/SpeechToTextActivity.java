@@ -1,7 +1,5 @@
 package com.example.polyjarvis;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -15,11 +13,8 @@ import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -27,7 +22,7 @@ import java.util.Locale;
 public class SpeechToTextActivity {
     public static final Integer RecordAudioRequestCode = 1;
     private SpeechRecognizer speechRecognizer;
-    private EditText editText;
+    private TextView textView;
     private ImageView micButton;
     private MainActivity mainActivity;
     private TextToSpeechActivity tts;
@@ -44,7 +39,7 @@ public class SpeechToTextActivity {
             checkPermission();
         }
 
-        editText = mainActivity.findViewById(R.id.text);
+        textView = mainActivity.findViewById(R.id.text);
         micButton = mainActivity.findViewById(R.id.buttonmic);
         speechRecognizer = SpeechRecognizer.createSpeechRecognizer(mainActivity);
 
@@ -60,8 +55,8 @@ public class SpeechToTextActivity {
 
             @Override
             public void onBeginningOfSpeech() {
-                editText.setText("");
-                editText.setHint("Listening...");
+                textView.setText("");
+                textView.setHint("Listening...");
             }
 
             @Override
@@ -88,7 +83,7 @@ public class SpeechToTextActivity {
             public void onResults(Bundle bundle) {
                 micButton.setImageResource(R.drawable.ic_mic_black_off);
                 ArrayList<String> data = bundle.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
-                editText.setText(data.get(0));
+                textView.setText(data.get(0));
                 tts.sendText(data.get(0));
             }
 
@@ -103,22 +98,6 @@ public class SpeechToTextActivity {
             }
         });
 
-        /*
-        micButton.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                if (motionEvent.getAction() == MotionEvent.ACTION_UP){
-                    micButton.setImageResource(R.drawable.ic_mic_black_off);
-                    speechRecognizer.stopListening();
-                }
-                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN){
-                    micButton.setImageResource(R.drawable.ic_mic_black_24dp);
-                    speechRecognizer.startListening(speechRecognizerIntent);
-                }
-                return false;
-            }
-        });
-         */
         micButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -137,27 +116,9 @@ public class SpeechToTextActivity {
 
     }
 
-    /*
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        speechRecognizer.destroy();
-    }
-     */
-
     private void checkPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             ActivityCompat.requestPermissions(mainActivity,new String[]{Manifest.permission.RECORD_AUDIO},RecordAudioRequestCode);
         }
     }
-    /*
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == RecordAudioRequestCode && grantResults.length > 0 ){
-            if(grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                Toast.makeText(this,"Permission Granted",Toast.LENGTH_SHORT).show();
-        }
-    }
-     */
 }
