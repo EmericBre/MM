@@ -4,6 +4,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -19,6 +20,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import android.os.Vibrator;
+
 public class SpeechToTextActivity {
     public static final Integer RecordAudioRequestCode = 1;
     private SpeechRecognizer speechRecognizer;
@@ -27,13 +30,15 @@ public class SpeechToTextActivity {
     private MainActivity mainActivity;
     private TextToSpeechActivity tts;
     private boolean listening = false;
+    private Vibrator v;
 
 
-    public SpeechToTextActivity(MainActivity mainActivity, TextToSpeechActivity tts) {
+    public SpeechToTextActivity(MainActivity mainActivity, TextToSpeechActivity tts, Vibrator v) {
         //super.onCreate(savedInstanceState);
 
         this.mainActivity = mainActivity;
         this.tts = tts;
+        this.v = v;
 
         if(ContextCompat.checkSelfPermission(mainActivity,Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED){
             checkPermission();
@@ -45,7 +50,7 @@ public class SpeechToTextActivity {
 
         final Intent speechRecognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+        speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.FRANCE);
 
         speechRecognizer.setRecognitionListener(new RecognitionListener() {
             @Override
@@ -84,6 +89,10 @@ public class SpeechToTextActivity {
                 micButton.setImageResource(R.drawable.ic_mic_black_off);
                 ArrayList<String> data = bundle.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
                 textView.setText(data.get(0));
+
+                // Vibrate for 400 milliseconds
+                v.vibrate(400);
+
                 tts.sendText(data.get(0));
             }
 

@@ -29,7 +29,7 @@ public class TextToSpeechActivity {
 
     public void sendText(String text) {
         String toSpeak = "T K T frérot je te reçois 5 sur 5";
-        Toast.makeText(mainActivity.getApplicationContext(), toSpeak,Toast.LENGTH_SHORT).show();
-        t1.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null);
+        Toast.makeText(mainActivity.getApplicationContext(), text,Toast.LENGTH_SHORT).show();
+        t1.speak(text, TextToSpeech.QUEUE_FLUSH, null);
     }
 }
