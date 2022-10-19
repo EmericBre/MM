@@ -20,9 +20,10 @@ import java.util.Locale;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
-public class MainActivity extends Activity{
+public class MainActivity extends AppCompatActivity {
 
     private SpeechToTextActivity sttactivity;
     private TextToSpeechActivity ttsactivity;
@@ -32,7 +33,7 @@ public class MainActivity extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        sttactivity = new SpeechToTextActivity();
-        ttsactivity = new TextToSpeechActivity();
+        ttsactivity = new TextToSpeechActivity(this);
+        sttactivity = new SpeechToTextActivity(this, ttsactivity);
     }
 }

@@ -24,22 +24,29 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Locale;
 
-public class SpeechToTextActivity extends AppCompatActivity {
+public class SpeechToTextActivity {
     public static final Integer RecordAudioRequestCode = 1;
     private SpeechRecognizer speechRecognizer;
     private EditText editText;
     private ImageView micButton;
+    private MainActivity mainActivity;
+    private TextToSpeechActivity tts;
+    private boolean listening = false;
 
-    @Override
-    protected void onCreate(final Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if(ContextCompat.checkSelfPermission(this,Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED){
+
+    public SpeechToTextActivity(MainActivity mainActivity, TextToSpeechActivity tts) {
+        //super.onCreate(savedInstanceState);
+
+        this.mainActivity = mainActivity;
+        this.tts = tts;
+
+        if(ContextCompat.checkSelfPermission(mainActivity,Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED){
             checkPermission();
         }
 
-        editText = findViewById(R.id.text);
-        micButton = findViewById(R.id.buttonmic);
-        speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
+        editText = mainActivity.findViewById(R.id.text);
+        micButton = mainActivity.findViewById(R.id.buttonmic);
+        speechRecognizer = SpeechRecognizer.createSpeechRecognizer(mainActivity);
 
         final Intent speechRecognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
@@ -82,6 +89,7 @@ public class SpeechToTextActivity extends AppCompatActivity {
                 micButton.setImageResource(R.drawable.ic_mic_black_off);
                 ArrayList<String> data = bundle.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
                 editText.setText(data.get(0));
+                tts.sendText(data.get(0));
             }
 
             @Override
@@ -95,10 +103,12 @@ public class SpeechToTextActivity extends AppCompatActivity {
             }
         });
 
+        /*
         micButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 if (motionEvent.getAction() == MotionEvent.ACTION_UP){
+                    micButton.setImageResource(R.drawable.ic_mic_black_off);
                     speechRecognizer.stopListening();
                 }
                 if (motionEvent.getAction() == MotionEvent.ACTION_DOWN){
@@ -108,22 +118,39 @@ public class SpeechToTextActivity extends AppCompatActivity {
                 return false;
             }
         });
+         */
+        micButton.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (listening) {
+                    micButton.setImageResource(R.drawable.ic_mic_black_off);
+                    speechRecognizer.stopListening();
+                } else {
+                    micButton.setImageResource(R.drawable.ic_mic_black_24dp);
+                    speechRecognizer.startListening(speechRecognizerIntent);
 
+                }
+                listening = !listening;
+                return false;
+            }
+        });
 
     }
 
+    /*
     @Override
     protected void onDestroy() {
         super.onDestroy();
         speechRecognizer.destroy();
     }
+     */
 
     private void checkPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.RECORD_AUDIO},RecordAudioRequestCode);
+            ActivityCompat.requestPermissions(mainActivity,new String[]{Manifest.permission.RECORD_AUDIO},RecordAudioRequestCode);
         }
     }
-
+    /*
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -132,4 +159,5 @@ public class SpeechToTextActivity extends AppCompatActivity {
                 Toast.makeText(this,"Permission Granted",Toast.LENGTH_SHORT).show();
         }
     }
+     */
 }
