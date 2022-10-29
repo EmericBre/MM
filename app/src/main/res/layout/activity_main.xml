@@ -15,22 +15,15 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
-    <TextView
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/buttonmic"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginRight="15dp"
-        android:padding="10dp"
-        android:hint="Tap to Speak"
-        android:layout_below="@id/buttonmic"
-        android:id="@+id/text"/>
-
-    <ImageView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:backgroundTint="#F9F8FA"
-        android:paddingRight="10dp"
-        android:src="@drawable/ic_mic_black_off"
-        android:layout_below="@id/textview"
-        android:id="@+id/buttonmic"/>
+        android:layout_centerInParent="true"
+        android:text="Tap to listen"
+        android:textSize="20sp"
+        android:padding="15dp"
+        android:textStyle="bold|italic"
+        android:background="#2207D1" />
 
 </RelativeLayout>
