@@ -7,7 +7,11 @@ import android.speech.tts.TextToSpeech;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
+
 import android.widget.Toast;
 
 public class TextToSpeechActivity {
@@ -30,8 +34,15 @@ public class TextToSpeechActivity {
     }
 
     public void sendText(String text) {
-        //String toSpeak = "T K T frérot je te reçois 5 sur 5";
-        String value = this.mainActivity.getData(text.toLowerCase(Locale.ROOT));
+        text = text.toLowerCase(Locale.ROOT);
+        HashMap<String, String> donnees = this.mainActivity.getData();
+        String value = "je n'ai pas compris, veuillez répéter";
+        for (Map.Entry<String, String> str : donnees.entrySet()) {
+            if (text.contains(str.getKey())){
+                value = str.getValue();
+                break;
+            }
+        }
         if (value=="je n'ai pas compris, veuillez répéter") {
             // Vibrate for 400 milliseconds
             v.vibrate(500);
