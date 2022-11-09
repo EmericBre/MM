@@ -31,7 +31,7 @@ public class TextToSpeechActivity {
 
     public void sendText(String text) {
         //String toSpeak = "T K T frérot je te reçois 5 sur 5";
-        String value = this.mainActivity.getData(text);
+        String value = this.mainActivity.getData(text.toLowerCase(Locale.ROOT));
         if (value=="je n'ai pas compris, veuillez répéter") {
             // Vibrate for 400 milliseconds
             v.vibrate(500);

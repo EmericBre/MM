@@ -60,6 +60,7 @@ public class SpeechToTextActivity {
             public void onBeginningOfSpeech() {
                 micButton.setBackgroundColor(Color.GREEN);
                 micButton.setText("Listening");
+                listening = true;
             }
 
             @Override
@@ -88,6 +89,8 @@ public class SpeechToTextActivity {
                 micButton.setText("Tap to listen");
                 ArrayList<String> data = bundle.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
 
+                listening = false;
+
                 tts.sendText(data.get(0));
             }
 
@@ -102,9 +105,9 @@ public class SpeechToTextActivity {
             }
         });
 
-        micButton.setOnTouchListener(new View.OnTouchListener() {
+        micButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
+            public void onClick(View view) {
                 if (listening) {
                     micButton.setBackgroundColor(Color.BLUE);
                     micButton.setText("Tap to listen");
@@ -115,7 +118,7 @@ public class SpeechToTextActivity {
                     speechRecognizer.startListening(speechRecognizerIntent);
                 }
                 listening = !listening;
-                return false;
+                return;
             }
         });
 

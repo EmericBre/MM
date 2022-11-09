@@ -33,11 +33,11 @@ public class MainActivity extends AppCompatActivity {
         HashMap<String, String> data = new HashMap<String, String>();
         data.put("say my name", "heisenberg");
         data.put("envoie un message", "a qui voulez-vous envoyer le message");
-        data.put("ouvre Twitter", "application twitter ouverte");
-        data.put("ouvre Instagram", "application instagram ouverte");
-        data.put("ouvre YouTube", "application youtube ouverte");
+        data.put("ouvre twitter", "application twitter ouverte");
+        data.put("ouvre instagram", "application instagram ouverte");
+        data.put("ouvre youTube", "application youtube ouverte");
         data.put("ouvre snapchat", "application snapchat ouverte");
-        data.put("lance Spotify", "voici une musique agréable");
+        data.put("lance spotify", "voici une musique agréable");
         data.put("donne-moi la météo", "il fait beau aujourd'hui");
         return data;
     }
